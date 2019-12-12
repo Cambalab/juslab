@@ -11,8 +11,3 @@ def read_file(path_file, format = 'docx'):
     fullText = [f.read()]
   f.close()
   return fullText
-
-# path_file = '/home/igzo/Documents/repositorios/investigacion/juslab/PROYECTO PANCHO/CONTRAVENCIONAL AUDIENCIA CONDENA 114 PENA EN SUSPENSO Proyecto.docx'
-# fullText = read_file(path_file)
-# final = '\n'.join(fullText)
-# print(final)

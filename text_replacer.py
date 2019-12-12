@@ -20,13 +20,3 @@ def tokenized(text, classifications, label = "XX"):
     else:
       transformed.append(token.text)
   return ' '.join(transformed)
-
-# file = open("prueba.txt", "r")
-# text = file.read()
-# classifications = {'names': ['Ayelén', 'Lopez', 'Carlos', 'González', 'Espinoza']}
-# new_text = replace(text, classifications)
-# new_text = tokenized(text, classifications)
-# print("BEFORE")
-# print(text)
-# print("AFTER")
-# print(new_text)
