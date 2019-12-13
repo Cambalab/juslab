@@ -1,16 +1,9 @@
-import string
-import re
+from re import match
 from spacy import load
-from spacy.lang.es.stop_words import STOP_WORDS
-import __future__
 from spacy.matcher import Matcher, PhraseMatcher
 from spacy.tokenizer import Tokenizer
 from spacy.tokens import Token
-import plac
-import spacy
-import re
 from dateparser import parse
-
 
 # Auxiliary functions
 def is_date(string):
@@ -22,21 +15,14 @@ def is_date(string):
         return False
 
 def is_email(string):
-    return re.match(r'\S+@\S+', str(string))
+    return match(r'\S+@\S+', str(string))
 
 def is_phone(string):
-    return re.match(r'\d{8,10}', str(string))
+    return match(r'\d{8,10}', str(string))
 
 def classify(text):
-  classifications = {}
   nlp = load('es_core_news_sm')
   matcher = Matcher(nlp.vocab)
-  
-  tokenized = nlp(text)
-  names = set()
-  locations = set()
-  emails = set()
-
 
   # Dni number Pattern
   pattern = [{"TEXT": u'DNI'}, {"SHAPE": "dd.ddd.ddd"}]
@@ -50,6 +36,11 @@ def classify(text):
   pattern = [{"TEXT": u'Tel'},{"SHAPE": "dddd"}]
   matcher.add("TELEFONO", None, pattern)
 
+  pattern = [{"SHAPE": "dd"}, {"ORTH":"-"}, {"SHAPE": "dddd"}, {"ORTH":"-"}, {"SHAPE": "dddd"}]
+  matcher.add("TELEFONO1", None, pattern)
+
+  pattern = [{"TEXT": u'Florencia'}]
+  matcher.add("FLORENCIA", None, pattern)
 
   contenido = text
   doc = nlp(contenido)
@@ -65,7 +56,7 @@ def classify(text):
           res.append(('NOMBRE', ent.start, ent.text))
 
       if (ent.label_ == 'LOC' and not is_email(ent) and not is_phone(ent)):
-          res.append(('LUGAR', ent.start, ent))
+          res.append(('LUGAR', ent.start, ent.text))
 
 
   for token in doc:
